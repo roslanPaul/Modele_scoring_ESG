@@ -16,6 +16,7 @@ NOTEBOOKS_DIR = os.path.join(BASE_DIR, "notebooks")
 SRC_DIR = os.path.join(BASE_DIR, "src")
 REPORTS_DIR = os.path.join(BASE_DIR, "reports")
 FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
+VISUALIZATION_OUTPUT_DIR = os.path.join(FIGURES_DIR, "visualizations")  # Ajout ici
 
 # Fichiers de donnees
 RAW_DATA_DIR = os.path.join(RAW_DATA_DIR, "SP 500 ESG Risk Ratings.csv")
@@ -65,6 +66,24 @@ ML_MODEL_PARAMS = {
 # Autres parametres
 RANDOM_SEED = 42 # Assurer la reproductibilite des resultats
 LOG_LEVEL = "INFO" # Niveau de log : DEBUG, INFO, WARNING ERROR, CRITICAL
+
+# Création des répertoires nécessaires s'ils n'existent pas
+def create_directories():
+    directories = [
+        DATA_DIR,
+        RAW_DATA_DIR,
+        CLEANED_DATA_DIR,
+        NOTEBOOKS_DIR,
+        SRC_DIR,
+        REPORTS_DIR,
+        FIGURES_DIR,
+        VISUALIZATION_OUTPUT_DIR
+    ]
+    
+    for directory in directories:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+            print(f"Création du répertoire : {directory}")
 
 if __name__ == "__main__":
     print("Configuration chargee avec succes.")
