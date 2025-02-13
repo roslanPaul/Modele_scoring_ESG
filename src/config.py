@@ -20,6 +20,7 @@ FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
 # Fichiers de donnees
 RAW_DATA_DIR = os.path.join(RAW_DATA_DIR, "SP 500 ESG Risk Ratings.csv")
 CLEANED_DATA_FILE = os.path.join(CLEANED_DATA_DIR, "cleaned_esg_data.csv")
+FINAL_SCORED_FILE = os.path.join(CLEANED_DATA_DIR, "final_scored_data.csv")
 
 # Colonnes des donnes ESG
 COLUMN_NAMES = [
@@ -41,9 +42,9 @@ OUTLIER_REMOVAL_METHOD = "z_score" # Methode de suppression aberrantes
 
 # Parametres de scoring ESG (ponderations)
 ESG_WEIGHTS = {
-    "environmental": 0.4,
-    "social": 0.3,
-    "governance": 0.3,
+    "Environment Risk Score": 0.4,
+    "Social Risk Score": 0.3,
+    "Governance Risk Score": 0.3,
     }
 
 # Parametres des modeles Machine Learning
