@@ -16,7 +16,9 @@ NOTEBOOKS_DIR = os.path.join(BASE_DIR, "notebooks")
 SRC_DIR = os.path.join(BASE_DIR, "src")
 REPORTS_DIR = os.path.join(BASE_DIR, "reports")
 FIGURES_DIR = os.path.join(REPORTS_DIR, "figures")
-VISUALIZATION_OUTPUT_DIR = os.path.join(FIGURES_DIR, "visualizations")  # Ajout ici
+VISUALIZATION_OUTPUT_DIR = os.path.join(FIGURES_DIR, "visualizations")  
+MODEL_OUTPUT_DIR = os.path.join(BASE_DIR, "models")
+# Ajout ici
 
 # Fichiers de donnees
 RAW_DATA_DIR = os.path.join(RAW_DATA_DIR, "SP 500 ESG Risk Ratings.csv")
@@ -77,7 +79,8 @@ def create_directories():
         SRC_DIR,
         REPORTS_DIR,
         FIGURES_DIR,
-        VISUALIZATION_OUTPUT_DIR
+        VISUALIZATION_OUTPUT_DIR,
+        MODEL_OUTPUT_DIR
     ]
     
     for directory in directories:
