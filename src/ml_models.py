@@ -21,7 +21,9 @@ def load_data(filepath=FINAL_SCORED_FILE):
     Charge les donnes contenant les scores ESG et les caracteristiques des entreprises 
     """
     try:
-        df = pd.read_csv(filepath, delimiter=",", encoding="utf-8", quotechar='"')
+        df = pd.read_csv(filepath, delimiter=",", encoding="utf-8", quotechar='"', on_bad_lines='skip')
+        # Nettoyage des noms de colonnes (suppression des espaces inutiles)
+        df.columns = df.columns.str.strip()
         return df
     except Exception as e:
         print(f"Erreur lors du chargement des donnees : {e}")
@@ -29,22 +31,58 @@ def load_data(filepath=FINAL_SCORED_FILE):
     
 def preprocess_data(df):
     """
-    Prepare les donnees pour l'entrainement du modele. Separe les variables explicatives et la variable cible (ESG_Score).
-    Applique l'encodage et la normalisation necessaires.
+    Prépare les données pour l'entraînement du modèle.
+    Sépare les variables explicatives et la variable cible (ESG_Score).
+    Applique l'encodage et la normalisation nécessaires.
     """
-    df = df.dropna(subset=["ESG_Score"]) # Supprime les lignes sans score ESG
-
-    # Defintion des features et de la target
-    X = df.drop(columns=["Symbol", "Name", "Address", "Description", "ESG_Score"])
-    y = df["ESG_Score"]
-
-    # Separation des types de variables
-    categorical_features = ["Sector", "Industry", "Controversy Level", "ESG Risk Level"]
-    numerical_features = ["Total ESG Risk Score", "Environment Risk Score", "Social Risk Score", "Governance Risk Score", "Controversy Score"]
-
-    # Transformation des variables categorielles et numeriques
-    preprocessor = ColumnTransformer(transformers=[("num", StandardScaler(), numerical_features), ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features)])
-
+    # Renommer pour uniformiser (Total ESG Risk score -> Total ESG Risk Score)
+    df.rename(columns={'Total ESG Risk score': 'Total ESG Risk Score'}, inplace=True)
+    
+    # Vérifier que la colonne cible existe
+    if "ESG_Score" not in df.columns:
+        raise ValueError("La colonne 'ESG_Score' n'existe pas dans le DataFrame.")
+    
+    # Supprimer les lignes sans score ESG
+    df = df.dropna(subset=["ESG_Score"])
+    
+    # Liste des colonnes numériques attendues
+    numerical_features = [
+        "Total ESG Risk Score", "Environment Risk Score", 
+        "Social Risk Score", "Governance Risk Score", "Controversy Score", "Full Time Employees"
+    ]
+    # Garder uniquement celles présentes dans le DataFrame
+    numerical_features = [col for col in numerical_features if col in df.columns]
+    
+    
+    
+    # Pour chaque colonne numérique, supprimer les virgules, tenter la conversion en float,
+    # et supprimer les lignes posant problème (ex: '78th percentile')
+    for col in numerical_features:
+        # Supprimer les virgules
+        cleaned = df[col].astype(str).str.replace(",", "")
+        # Convertir en float en remplaçant les erreurs par NaN
+        df[col] = pd.to_numeric(cleaned, errors='coerce')
+        # Supprimer les lignes où la conversion a échoué
+        df = df.dropna(subset=[col])
+    
+    # Séparer les features explicatives (X) et la cible (y)
+    # On supprime les colonnes non explicatives
+    drop_cols = ["Symbol", "Name", "Address", "Description", "ESG_Score", "ESG Risk Percentile"]
+    X = df.drop(columns=drop_cols)
+    y = df["ESG_Score"].astype(float)
+    
+    # Identification des colonnes catégorielles déjà encodées (elles sont issues d'un one-hot encoding)
+    # Ici, on considère que toutes les colonnes restantes qui ne sont pas numériques sont déjà encodées.
+    categorical_features = [col for col in X.columns if col not in numerical_features]
+    
+    # Création du préprocesseur : normalisation des variables numériques, et passage direct des autres colonnes
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("num", StandardScaler(), numerical_features)
+        ],
+        remainder='passthrough'
+    )
+    
     return X, y, preprocessor
 
 def train_models(X, y, preprocessor):
@@ -105,4 +143,4 @@ def main():
         print("Erreur : impossible de charger les donnes pour l'entrainement.")
 
 if __name__ == "__main__":
-    main(
+    main()
