@@ -93,36 +93,3 @@ def create_directories():
 
 if __name__ == "__main__":
     print("Configuration chargee avec succes.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
