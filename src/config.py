@@ -26,6 +26,8 @@ MODEL_OUTPUT_DIR = os.path.join(BASE_DIR, "models")
 RAW_DATA_FILE = os.path.join(RAW_DATA_DIR, "SP 500 ESG Risk Ratings.csv")
 CLEANED_DATA_FILE = os.path.join(CLEANED_DATA_DIR, "cleaned_esg_data.csv")
 FINAL_SCORED_FILE = os.path.join(CLEANED_DATA_DIR, "final_scored_data.csv")
+PROCESSED_DATA_FILE = os.path.join(CLEANED_DATA_DIR, "processed_esg_data.csv")
+KAGGLE_DATASET = "SP 500 ESG Risk Ratings"
 
 # Colonnes des donnes ESG
 COLUMN_NAMES = [
@@ -34,8 +36,7 @@ COLUMN_NAMES = [
 
 # Colonnes numeriques pour analyse statistique et normalisation
 NUMERIC_COLUMNS = [
-    "Total ESG Risk Score", "Environment Risk Score", "Governance Risk Score", "Social Risk Score", "Controversy Score"
-    ]
+    "Total ESG Risk Score", "Environment Risk Score", "Governance Risk Score", "Social Risk Score", "Controversy Score"]
 
 # Colonnes categorielles
 CATEGORICAL_COLUMNS = ["Sector", "Industry", "Controversy Level", "ESG Risk Level"]

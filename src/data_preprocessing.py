@@ -14,7 +14,7 @@ from config import *
 # Assurer la reproductibilite
 np.random.seed(RANDOM_SEED)
 
-def load_data(filepath=RAW_DATA_DIR):
+def load_data(filepath=RAW_DATA_FILE):
     """
     Charge les donnes brutes depuis un fichier CSV.
     """
